@@ -234,55 +234,7 @@ body{
 .pagination button.active{
   background:red;
 }
-  /* Holi Banner */
-.event-banner{
-  position:fixed;
-  top:0;
-  width:100%;
-  background:linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0,#ff0080);
-  background-size:300% 300%;
-  animation:gradientMove 5s infinite linear;
-  color:white;
-  text-align:center;
-  padding:12px 10px;
-  font-weight:bold;
-  z-index:3000;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:20px;
-}
-
-.event-banner button{
-  background:white;
-  border:none;
-  padding:4px 8px;
-  border-radius:50%;
-  cursor:pointer;
-}
-
-@keyframes gradientMove{
-  0%{background-position:0% 50%;}
-  100%{background-position:100% 50%;}
-}
-
-/* Canvas */
-#holiCanvas{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:1000;
-}
-
-/* Body offset */
-body{
-  padding-top:50px;
-}
-
-  /* HOli akhane sesh***** */
+  
 
 /* Loader */
 .loader{
@@ -330,22 +282,6 @@ body{
 }
 </style>
 </head>
-
-  
- <!-- 🎉 Holi Festival Banner -->
-<div class="event-banner" id="eventBanner">
-  <span>🎉 Happy Holi! Enjoy Unlimited Colorful Entertainment 🌈</span>
-  <button onclick="closeBanner()">✖</button>
-</div>
-
-<!-- 🎨 Canvas for Color Particles -->
-<canvas id="holiCanvas"></canvas>
-
-<!-- 🎵 Optional Music -->
-<audio id="holiMusic" loop preload="auto">
-  <source src="https://drive.google.com/uc?export=download&id=1_fmDRnlPN4d7c8Zc5jWBHXCN2vUmyhkV" type="audio/mp3">
-</audio>
-
 
   
 <body>
@@ -469,15 +405,7 @@ body{
 </div>
 </div>
 
-<!-- Player -->
-<div class="player" id="player">
-<video id="mainVideo" controls autoplay playsinline></video>
-<div class="controls">
-<button onclick="backward()">⏪ 10s</button>
-<button onclick="forward()">10s ⏩</button>
-<button onclick="mainVideo.requestFullscreen()">⛶ Fullscreen</button>
-<button onclick="closePlayer()">Close</button>
-</div>
+
 </div>
 
 <div class="footer">
@@ -509,98 +437,7 @@ document.getElementById("player").style.display="flex";
 }
 
 
-  /* Close Banner */
-function closeBanner(){
-  document.getElementById("eventBanner").style.display="none";
-}
 
-/* Auto Expiry */
-const expiry = new Date("2026-03-10");
-if(new Date() > expiry){
-  document.getElementById("eventBanner").style.display="none";
-}
-
-/* 🎨 Color Falling Animation */
-const canvas = document.getElementById("holiCanvas");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for(let i=0;i<120;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*6+2,
-    d:Math.random()*1
-  });
-}
-
-function drawParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="rgba("+Math.random()*255+","+Math.random()*255+","+Math.random()*255+",0.8)";
-  ctx.beginPath();
-
-  for(let i=0;i<particles.length;i++){
-    let p = particles[i];
-    ctx.moveTo(p.x,p.y);
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-  }
-  ctx.fill();
-  updateParticles();
-}
-
-function updateParticles(){
-  for(let i=0;i<particles.length;i++){
-    particles[i].y += particles[i].d+1;
-    if(particles[i].y > canvas.height){
-      particles[i].y = 0;
-      particles[i].x = Math.random()*canvas.width;
-    }
-  }
-}
-
-setInterval(drawParticles,30);
-
-/* 🎉 Click Burst Effect */
-document.addEventListener("click",function(e){
-  const burst = document.createElement("div");
-  burst.style.position="fixed";
-  burst.style.left=e.clientX+"px";
-  burst.style.top=e.clientY+"px";
-  burst.style.width="20px";
-  burst.style.height="20px";
-  burst.style.background="radial-gradient(circle, red, yellow, blue)";
-  burst.style.borderRadius="50%";
-  burst.style.pointerEvents="none";
-  burst.style.animation="burstAnim 0.6s ease-out";
-  document.body.appendChild(burst);
-
-  setTimeout(()=>burst.remove(),600);
-});
-
-/* Burst animation */
-const style = document.createElement('style');
-style.innerHTML = `
-@keyframes burstAnim{
-  from{transform:scale(1);opacity:1;}
-  to{transform:scale(8);opacity:0;}
-}`;
-document.head.appendChild(style);
-
-/* 🎵 Play Music on First Interaction */
-document.addEventListener("click",function(){
-  const music = document.getElementById("holiMusic");
-  if(music.paused){
-    music.volume=0.2;
-    music.play();
-  }
-},{once:true});
-
-
-  /* holi close@@@@@@@@@@@@@ */
 
 /* Close */
 function closePlayer(){
