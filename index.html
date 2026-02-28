@@ -34,59 +34,8 @@ body{
   display:flex;
   align-items:center;
   padding-left:30px;
-}/* Hero Section */
-.hero{
-  height:80vh;
-  background:linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)),
-  url('https://images.unsplash.com/photo-1601933470096-0e34634ffcde');
-  background-size:cover;
-  background-position:center;
-  display:flex;
-  align-items:center;
-  padding:0 60px;
-  color:white;
 }
-
-.hero-content h1{
-  font-size:45px;
-  margin-bottom:15px;
-}
-
-.hero-content p{
-  font-size:18px;
-  margin-bottom:20px;
-}
-
-.hero-content button{
-  padding:10px 20px;
-  background:red;
-  border:none;
-  color:white;
-  border-radius:5px;
-  cursor:pointer;
-}
-
-/* Notification Badge */
-.notification{
-  position:relative;
-  cursor:pointer;
-}
-
-.badge{
-  position:absolute;
-  top:-5px;
-  right:-10px;
-  background:red;
-  font-size:10px;
-  padding:2px 6px;
-  border-radius:50%;
-}
-
-/* Movie Smooth Layout Fix */
-.section{
-  margin-top:100px;
-}
-
+ 
 .hero h1{
   font-size:40px;
 }
@@ -332,47 +281,7 @@ body{
 }
 </style>
 </head>
-<nav class="navbar" id="navbar">
-
-  <div class="logo">EVOFOXRED</div>
-
-  <div class="search-box">
-    <input type="text" placeholder="Search movies..." id="searchInput" onkeyup="searchMovies()">
-  </div>
-
-  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
-  <ul class="nav-links" id="navLinks">
-
-    <li><a href="#">Home</a></li>
-    <li><a href="#movies">Movies</a></li>
-
-    <li id="signupBtn"><a href="#signup">Signup</a></li>
-    <li id="loginBtn"><a href="#login">Login</a></li>
-
-    <li id="userSection" style="display:none;">
-      👤 <span id="usernameDisplay"></span>
-    </li>
-
-    <li id="logoutBtn" style="display:none;">
-      <a href="#" onclick="logout()">Logout</a>
-    </li>
-
-    <li class="notification">
-      🔔 <span class="badge" id="notifCount">0</span>
-    </li>
-
-  </ul>
-
-</nav>
-  
-  <section class="hero">
-  <div class="hero-content">
-    <h1>Unlimited Movies, Anytime.</h1>
-    <p>Stream the latest trending films in HD quality.</p>
-    <button onclick="scrollToMovies()">Browse Now</button>
-  </div>
-</section>
+ 
 <body>
 <div class="loader" id="loader" style="display:none;">
   <div></div>
@@ -588,54 +497,6 @@ currentPage=i;
 showPage(i);
 };
   
-  /* Mobile Menu */
-function toggleMenu(){
-  document.getElementById("navLinks").classList.toggle("show");
-}
-
-/* Scroll Navbar Effect */
-window.addEventListener("scroll",function(){
-  const navbar=document.getElementById("navbar");
-  navbar.classList.toggle("scrolled",window.scrollY>50);
-});
-
-/* Smooth Scroll */
-function scrollToMovies(){
-  document.getElementById("movies").scrollIntoView({behavior:"smooth"});
-}
-
-/* Fake Login System (UI Control) */
-function fakeLogin(username){
-  document.getElementById("signupBtn").style.display="none";
-  document.getElementById("loginBtn").style.display="none";
-
-  document.getElementById("userSection").style.display="block";
-  document.getElementById("logoutBtn").style.display="block";
-  document.getElementById("usernameDisplay").innerText=username;
-
-  document.getElementById("notifCount").innerText="3";
-}
-
-function logout(){
-  document.getElementById("signupBtn").style.display="block";
-  document.getElementById("loginBtn").style.display="block";
-
-  document.getElementById("userSection").style.display="none";
-  document.getElementById("logoutBtn").style.display="none";
-
-  document.getElementById("notifCount").innerText="0";
-}
-
-/* Search Filter */
-function searchMovies(){
-  let input=document.getElementById("searchInput").value.toLowerCase();
-  let movies=document.querySelectorAll(".movie");
-
-  movies.forEach(movie=>{
-    let title=movie.querySelector(".title").innerText.toLowerCase();
-    movie.style.display=title.includes(input) ? "block" : "none";
-  });
-}
 container.appendChild(btn);
 }
 }
