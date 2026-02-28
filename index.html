@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVOFOXRED</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+body{
+  margin:0;
+  background:#141414;
+  font-family:Arial;
+  color:white;
+}
+
+/* Header */
+.header{
+  position:fixed;
+  width:100%;
+  padding:15px 20px;
+  font-size:26px;
+  font-weight:bold;
+  color:red;
+  background:rgba(0,0,0,0.95);
+  z-index:1000;
+}
+
+/* Hero */
+.hero{
+  height:60vh;
+  background:linear-gradient(to right,#000,transparent),
+  url('https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?q=80&w=1920') center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  padding-left:30px;
+}
+
+.hero h1{
+  font-size:40px;
+}
+
+/* Section */
+.section{
+  padding:100px 40px 40px 40px;
+}
+
+.section h2{
+  margin-bottom:20px;
+}
+
+/* GRID SYSTEM */
+.movies{
+  display:grid;
+  grid-template-columns:repeat(5, 1fr);
+  gap:20px;
+}
+
+/* Tablet */
+@media(max-width:1000px){
+  .movies{
+    grid-template-columns:repeat(3, 1fr);
+  }
+}
+
+/* Mobile */
+@media(max-width:600px){
+  .movies{
+    grid-template-columns:repeat(2, 1fr);
+  }
+}
+
+/* Movie Card */
+.movie{
+  position:relative;
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+  background:#000;
+}
+
+.movie video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.title{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  background:rgba(0,0,0,0.7);
+  text-align:center;
+  padding:6px;
+  font-size:14px;
+}
+
+.movie:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 15px red;
+}
+
+/* Player */
+.player{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:black;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:2000;
+}
+
+.player video{
+  width:90%;
+  max-height:80vh;
+}
+
+.controls{
+  margin-top:10px;
+}
+
+.controls button{
+  margin:5px;
+  padding:8px 15px;
+  background:red;
+  border:none;
+  color:white;
+  border-radius:5px;
+  cursor:pointer;
+}
+/* Play Button Overlay */
+.play-btn{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:55px;
+  height:55px;
+  background:#007bff;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  color:white;
+  opacity:0.9;
+  transition:0.3s;
+  pointer-events:none;
+}
+
+.movie:hover .play-btn{
+  transform:translate(-50%,-50%) scale(1.2);
+  background:#0056d2;
+}
+/* Overlay */
+.overlay{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(2px);
+  opacity:0;
+  transition:0.3s;
+}
+
+.movie:hover .overlay{
+  opacity:1;
+}
+
+/* Play Button */
+.play-btn{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:60px;
+  height:60px;
+  background:#007bff;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  color:white;
+  animation:pulse 2s infinite;
+  overflow:hidden;
+}
+
+/* Pulse Animation */
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(0,123,255,0.7);}
+  70%{box-shadow:0 0 0 15px rgba(0,123,255,0);}
+  100%{box-shadow:0 0 0 0 rgba(0,123,255,0);}
+}
+
+/* Ripple Effect */
+.ripple{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,0.7);
+  transform:scale(0);
+  animation:rippleAnim 0.6s linear;
+}
+
+@keyframes rippleAnim{
+  to{
+    transform:scale(4);
+    opacity:0;
+  }
+}
+
+/* Pagination */
+.pagination{
+  margin-top:30px;
+  text-align:center;
+}
+
+.pagination button{
+  margin:5px;
+  padding:6px 12px;
+  border:none;
+  background:#333;
+  color:white;
+  cursor:pointer;
+  border-radius:4px;
+}
+
+.pagination button.active{
+  background:red;
+}
+
+/* Loader */
+.loader{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:3000;
+}
+
+.loader div{
+  width:50px;
+  height:50px;
+  border:5px solid #444;
+  border-top:5px solid red;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg);}
+}
+
+/* Footer */
+.footer{
+  text-align:center;
+  padding:30px 10px;
+  background:#000;
+}
+
+.social-icons a{
+  color:white;
+  margin:0 12px;
+  font-size:22px;
+  transition:0.3s;
+}
+
+.social-icons a:hover{
+  color:red;
+}
+</style>
+</head>
+
+<body>
+<div class="loader" id="loader" style="display:none;">
+  <div></div>
+</div>
+
+<div class="header">EVOFOXRED</div>
+
+<div class="hero">
+  <h1>Lerne Deutsch beim Filmschauen </h1>
+</div>
+
+<div class="section">
+<h2>Jetzt im Trend</h2>
+
+<div class="movies">
+
+<!-- 11 Videos -->
+
+<div class="movie" onclick="playVideo('https://pd-videos.daserste.de/int/2025/11/03/05201daa-204c-455d-a85f-2f7a1ab2bcf1/JOB_571194__sendeton_1920x1080-50p-5000kbit.mp4')">
+<video src="https://pd-videos.daserste.de/int/2025/11/03/05201daa-204c-455d-a85f-2f7a1ab2bcf1/JOB_571194__sendeton_1920x1080-50p-5000kbit.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video> 
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 1</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://pd-videos.daserste.de/int/2022/04/29/dfae4394-b258-4c00-953b-f0be658ad6d5/JOB_538369__sendeton_1920x1080-50p-5000kbit.mp4')">
+<video src="https://pd-videos.daserste.de/int/2022/04/29/dfae4394-b258-4c00-953b-f0be658ad6d5/JOB_538369__sendeton_1920x1080-50p-5000kbit.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 2</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://pd-videos.daserste.de/int/2021/04/01/0b80f513-83fe-4b0d-9a14-ed80fb86ac8d/JOB_547037__sendeton_1920x1080-50p-5000kbit.mp4')">
+<video src="https://pd-videos.daserste.de/int/2021/04/01/0b80f513-83fe-4b0d-9a14-ed80fb86ac8d/JOB_547037__sendeton_1920x1080-50p-5000kbit.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 3</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://pd-videos.daserste.de/int/2023/04/22/405f34cc-1807-49d7-a73f-17645d7dd302/JOB_550844__sendeton_1920x1080-50p-5000kbit.mp4')">
+<video src="https://pd-videos.daserste.de/int/2023/04/22/405f34cc-1807-49d7-a73f-17645d7dd302/JOB_550844__sendeton_1920x1080-50p-5000kbit.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 4</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://pdodswr-a.akamaihd.net/swr/video/die-nichte-des-polizisten/2269639.avc-1080.mp4')">
+<video src="https://pdodswr-a.akamaihd.net/swr/video/die-nichte-des-polizisten/2269639.avc-1080.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 5</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://pd-videos.daserste.de/int/2022/11/09/9b0db0f1-d7fe-46f9-91d9-e9ce53dc0804/JOB_567119__sendeton_1920x1080-50p-5000kbit.mp4')">
+<video src="https://pd-videos.daserste.de/int/2022/11/09/9b0db0f1-d7fe-46f9-91d9-e9ce53dc0804/JOB_567119__sendeton_1920x1080-50p-5000kbit.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 6</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://pd-videos.daserste.de/int/2023/08/10/e4701e63-7016-465d-ab00-445b4d01f31b/JOB_580192__sendeton_1920x1080-50p-5000kbit.mp4')">
+<video src="https://pd-videos.daserste.de/int/2023/08/10/e4701e63-7016-465d-ab00-445b4d01f31b/JOB_580192__sendeton_1920x1080-50p-5000kbit.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 7</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://cdn-storage.br.de/MUJIuUOVBwQIbtC2uKJDM6OhuLnC_2rH5K1S/_-OS/_28G_2bp571S/15b31fe5-c13c-42b2-953f-23b943147e4f_HD.mp4')">
+<video src="https://cdn-storage.br.de/MUJIuUOVBwQIbtC2uKJDM6OhuLnC_2rH5K1S/_-OS/_28G_2bp571S/15b31fe5-c13c-42b2-953f-23b943147e4f_HD.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 8</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://rbbmediapmdp-a.akamaihd.net/content/19/2d/192d1ad4-d99e-40fd-9f86-d695fca4e676/192d1ad4-d99e-40fd-9f86-d695fca4e676_hd1080-avc1080.mp4')">
+<video src="https://rbbmediapmdp-a.akamaihd.net/content/19/2d/192d1ad4-d99e-40fd-9f86-d695fca4e676/192d1ad4-d99e-40fd-9f86-d695fca4e676_hd1080-avc1080.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn"onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 9</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://pd-videos.daserste.de/int/2023/08/15/d26def34-d01a-4fd6-8cdc-e4bebc31dbf7/JOB_549151__sendeton_1920x1080-50p-5000kbit.mp4')">
+<video src="https://pd-videos.daserste.de/int/2023/08/15/d26def34-d01a-4fd6-8cdc-e4bebc31dbf7/JOB_549151__sendeton_1920x1080-50p-5000kbit.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn" onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 10</div>
+</div>
+
+<div class="movie" onclick="playVideo('https://mediandr-a.akamaihd.net/progressive/2023/0708/TV-20230708-1704-1800.1080.mp4')">
+<video src="https://mediandr-a.akamaihd.net/progressive/2023/0708/TV-20230708-1704-1800.1080.mp4" muted autoplay playsinline ontimeupdate="limitPreview(this)"></video>
+<div class="overlay"></div>
+<div class="play-btn" onclick="rippleEffect(event)">
+<i class="fa-solid fa-play"></i>
+</div>
+<div class="title">Movie 11</div>
+</div>
+<div class="pagination" id="pagination"></div>
+
+</div>
+</div>
+
+<!-- Player -->
+<div class="player" id="player">
+<video id="mainVideo" controls autoplay playsinline></video>
+<div class="controls">
+<button onclick="backward()">⏪ 10s</button>
+<button onclick="forward()">10s ⏩</button>
+<button onclick="mainVideo.requestFullscreen()">⛶ Fullscreen</button>
+<button onclick="closePlayer()">Close</button>
+</div>
+</div>
+
+<div class="footer">
+<div class="social-icons">
+<a href="https://www.instagram.com/evofoxred?igsh=YTVoa3RwajNxcmlj&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+<a href="https://www.facebook.com/share/1CwXe96TH7/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook"></i></a>
+<a href="https://x.com/riponkumarbhu23?s=11" target="_blank"><i class="fab fa-x-twitter"></i></a>
+<a href="https://www.linkedin.com/in/ripon-kr-mondal-b80b73212?" target="_blank"><i class="fab fa-linkedin"></i></a>
+</div>
+<p>© 2026 Copyright by Ripon Kumar Mondal</p>
+</div>
+
+<script>
+var mainVideo=document.getElementById("mainVideo");
+
+/* Preview Stop */
+function limitPreview(video){
+if(video.currentTime>=15){video.pause();}
+}
+
+/* Play */
+function playVideo(link){
+showLoader();
+mainVideo.src=link;
+setTimeout(()=>{
+document.getElementById("loader").style.display="none";
+document.getElementById("player").style.display="flex";
+},1000);
+}
+
+/* Close */
+function closePlayer(){
+mainVideo.pause();
+mainVideo.src="";
+document.getElementById("player").style.display="none";
+}
+
+/* Controls */
+function forward(){mainVideo.currentTime+=10;}
+function backward(){mainVideo.currentTime-=10;}
+
+/* Ripple */
+function rippleEffect(e){
+e.stopPropagation();
+const circle=document.createElement("span");
+circle.classList.add("ripple");
+const btn=e.currentTarget;
+btn.appendChild(circle);
+setTimeout(()=>{circle.remove();},600);
+}
+
+/* Loader */
+function showLoader(){
+document.getElementById("loader").style.display="flex";
+}
+
+/* Pagination System */
+const movies=document.querySelectorAll(".movie");
+const perPage=10;
+const totalPages=Math.ceil(movies.length/perPage);
+let currentPage=1;
+
+function showPage(page){
+movies.forEach((movie,index)=>{
+movie.style.display=
+(index>=(page-1)*perPage && index<page*perPage)
+? "block" : "none";
+});
+
+document.querySelectorAll(".pagination button")
+.forEach(btn=>btn.classList.remove("active"));
+document.getElementById("page"+page)?.classList.add("active");
+}
+
+function createPagination(){
+const container=document.getElementById("pagination");
+for(let i=1;i<=totalPages;i++){
+let btn=document.createElement("button");
+btn.innerText=i;
+btn.id="page"+i;
+btn.onclick=function(){
+currentPage=i;
+showPage(i);
+};
+container.appendChild(btn);
+}
+}
+
+createPagination();
+showPage(1);
+</script>
+
+</body>
+</html>
